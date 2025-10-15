@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园失物招领平台</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .transition-custom {
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <header id="navbar" class="bg-white shadow-md fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-university text-primary text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-dark">校园失物招领平台</h1>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" id="nav-home" class="text-gray-700 hover:text-primary transition-custom font-medium">首页</a>
+                <a href="#" id="nav-found" class="text-gray-700 hover:text-primary transition-custom font-medium">招领物品</a>
+                <a href="#" id="nav-lost" class="text-gray-700 hover:text-primary transition-custom font-medium">丢失物品</a>
+                <a href="#" id="nav-admin" class="text-gray-700 hover:text-primary transition-custom font-medium">管理员入口</a>
+            </nav>
+            
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#" id="mobile-nav-home" class="text-gray-700 hover:text-primary py-2 transition-custom">首页</a>
+                <a href="#" id="mobile-nav-found" class="text-gray-700 hover:text-primary py-2 transition-custom">招领物品</a>
+                <a href="#" id="mobile-nav-lost" class="text-gray-700 hover:text-primary py-2 transition-custom">丢失物品</a>
+                <a href="#" id="mobile-nav-admin" class="text-gray-700 hover:text-primary py-2 transition-custom">管理员入口</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <!-- 首页区域 -->
+        <section id="home-section" class="mb-16">
+            <div class="bg-gradient-to-r from-primary to-blue-400 rounded-2xl p-8 md:p-12 text-white mb-12 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-1/3 h-full opacity-10">
+                    <i class="fa fa-paper-plane text-[200px] absolute -right-20 -top-20"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 relative z-10">让遗失的物品找到回家的路</h2>
+                <p class="text-lg md:text-xl mb-6 max-w-2xl relative z-10">校园失物招领平台帮助你快速找到丢失的物品，或发布你拾到的物品信息，让校园生活更便捷。</p>
+                <div class="flex flex-col sm:flex-row gap-4 relative z-10">
+                    <a href="#found-section" class="bg-white text-primary font-semibold py-3 px-6 rounded-lg text-center hover:bg-gray-100 transition-custom shadow-lg">
+                        查看招领物品
+                    </a>
+                    <a href="#report-section" class="bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg text-center hover:bg-white/10 transition-custom">
+                        发布物品信息
+                    </a>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-search text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">快速查找</h3>
+                    <p class="text-gray-600">按类别、地点和时间筛选，快速找到你丢失的物品。</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-upload text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">便捷发布</h3>
+                    <p class="text-gray-600">简单几步，发布你拾到的物品信息，帮助他人找回失物。</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-shield text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">安全可靠</h3>
+                    <p class="text-gray-600">管理员审核确保信息真实有效，保障双方权益。</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 md:p-8 card-shadow">
+                <h3 class="text-2xl font-bold mb-6 text-center">最近招领物品</h3>
+                <div id="recent-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 最近物品将通过JavaScript动态生成 -->
+                </div>
+                <div class="text-center mt-8">
+                    <a href="#found-section" class="inline-flex items-center text-primary font-semibold hover:underline">
+                        查看更多物品 <i class="fa fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 招领物品区域 -->
+        <section id="found-section" class="mb-16 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-dark mb-2">招领物品</h2>
+                    <p class="text-gray-600">这里是同学们拾到并发布的物品信息</p>
+                </div>
+                
+                <div class="mt-4 md:mt-0 w-full md:w-auto">
+                    <div class="relative">
+                        <input type="text" id="search-items" placeholder="搜索物品..." class="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 分类筛选 -->
+            <div class="bg-white p-4 rounded-xl card-shadow mb-8">
+                <div class="flex flex-wrap gap-2">
+                    <button class="category-btn active px-4 py-2 rounded-full bg-primary text-white text-sm font-medium transition-custom" data-category="all">
+                        全部物品
+                    </button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-custom" data-category="electronics">
+                        <i class="fa fa-mobile mr-1"></i> 电子产品
+                    </button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-custom" data-category="documents">
+                        <i class="fa fa-id-card mr-1"></i> 证件
+                    </button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-custom" data-category="bags">
+                        <i class="fa fa-briefcase mr-1"></i> 包袋
+                    </button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-custom" data-category="clothes">
+                        <i class="fa fa-shopping-bag mr-1"></i> 衣物
+                    </button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-custom" data-category="others">
+                        <i class="fa fa-ellipsis-h mr-1"></i> 其他
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 物品列表 -->
+            <div id="items-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 物品列表将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 无物品提示 -->
+            <div id="no-items" class="hidden text-center py-16">
+                <i class="fa fa-search text-6xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">没有找到符合条件的物品</p>
+            </div>
+        </section>
+        
+        <!-- 丢失物品区域 -->
+        <section id="lost-section" class="mb-16 hidden">
+            <h2 class="text-3xl font-bold text-dark mb-2">丢失物品登记</h2>
+            <p class="text-gray-600 mb-8">如果你丢失了物品，可以在这里登记信息，方便他人找到后联系你</p>
+            
+            <div class="bg-white rounded-xl p-6 md:p-8 card-shadow max-w-2xl mx-auto">
+                <form id="lost-item-form" class="space-y-6">
+                    <div>
+                        <label for="lost-item-name" class="block text-gray-700 font-medium mb-2">物品名称</label>
+                        <input type="text" id="lost-item-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                    </div>
+                    
+                    <div>
+                        <label for="lost-item-category" class="block text-gray-700 font-medium mb-2">物品类别</label>
+                        <select id="lost-item-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                            <option value="">请选择类别</option>
+                            <option value="electronics">电子产品</option>
+                            <option value="documents">证件</option>
+                            <option value="bags">包袋</option>
+                            <option value="clothes">衣物</option>
+                            <option value="others">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="lost-item-description" class="block text-gray-700 font-medium mb-2">物品描述</label>
+                        <textarea id="lost-item-description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="请描述物品的特征、颜色、品牌等信息"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="lost-location" class="block text-gray-700 font-medium mb-2">丢失地点</label>
+                        <input type="text" id="lost-location" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="例如：图书馆三楼、篮球场等">
+                    </div>
+                    
+                    <div>
+                        <label for="lost-date" class="block text-gray-700 font-medium mb-2">丢失日期</label>
+                        <input type="date" id="lost-date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                    </div>
+                    
+                    <div>
+                        <label for="contact-info" class="block text-gray-700 font-medium mb-2">联系方式</label>
+                        <input type="text" id="contact-info" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="电话或微信，方便找到后联系你">
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-custom shadow-md">
+                            提交丢失物品信息
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- 发布物品区域 -->
+        <section id="report-section" class="mb-16 hidden">
+            <h2 class="text-3xl font-bold text-dark mb-2">发布招领物品</h2>
+            <p class="text-gray-600 mb-8">如果你拾到了物品，可以在这里发布信息，帮助失主找回</p>
+            
+            <div class="bg-white rounded-xl p-6 md:p-8 card-shadow max-w-2xl mx-auto">
+                <form id="found-item-form" class="space-y-6">
+                    <div>
+                        <label for="found-item-name" class="block text-gray-700 font-medium mb-2">物品名称</label>
+                        <input type="text" id="found-item-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                    </div>
+                    
+                    <div>
+                        <label for="found-item-category" class="block text-gray-700 font-medium mb-2">物品类别</label>
+                        <select id="found-item-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                            <option value="">请选择类别</option>
+                            <option value="electronics">电子产品</option>
+                            <option value="documents">证件</option>
+                            <option value="bags">包袋</option>
+                            <option value="clothes">衣物</option>
+                            <option value="others">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="found-item-description" class="block text-gray-700 font-medium mb-2">物品描述</label>
+                        <textarea id="found-item-description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="请描述物品的特征、颜色、品牌等信息"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="found-location" class="block text-gray-700 font-medium mb-2">拾到地点</label>
+                        <input type="text" id="found-location" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="例如：图书馆三楼、篮球场等">
+                    </div>
+                    
+                    <div>
+                        <label for="found-date" class="block text-gray-700 font-medium mb-2">拾到日期</label>
+                        <input type="date" id="found-date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                    </div>
+                    
+                    <div>
+                        <label for="finder-contact" class="block text-gray-700 font-medium mb-2">你的联系方式</label>
+                        <input type="text" id="finder-contact" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required placeholder="电话或微信，方便失主联系你">
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-custom shadow-md">
+                            提交招领物品信息
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- 管理员登录区域 -->
+        <section id="admin-login-section" class="mb-16 hidden">
+            <div class="max-w-md mx-auto">
+                <h2 class="text-3xl font-bold text-dark mb-2 text-center">管理员登录</h2>
+                <p class="text-gray-600 mb-8 text-center">请输入管理员账号和密码</p>
+                
+                <div class="bg-white rounded-xl p-6 md:p-8 card-shadow">
+                    <form id="admin-login-form" class="space-y-6">
+                        <div>
+                            <label for="admin-username" class="block text-gray-700 font-medium mb-2">管理员账号</label>
+                            <input type="text" id="admin-username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-password" class="block text-gray-700 font-medium mb-2">密码</label>
+                            <input type="password" id="admin-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div id="login-error" class="hidden text-red-500 text-sm">
+                            账号或密码错误，请重试
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-dark text-white font-semibold py-3 px-6 rounded-lg hover:bg-dark/90 transition-custom shadow-md">
+                                登录
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 管理员面板区域 -->
+        <section id="admin-panel-section" class="mb-16 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-dark mb-2">管理员面板</h2>
+                    <p class="text-gray-600">管理所有招领物品信息</p>
+                </div>
+                
+                <div class="mt-4 md:mt-0">
+                    <button id="logout-btn" class="flex items-center text-gray-700 hover:text-red-500 transition-custom font-medium">
+                        <i class="fa fa-sign-out mr-2"></i> 退出登录
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 管理员功能按钮 -->
+            <div class="bg-white p-4 rounded-xl card-shadow mb-8 flex flex-wrap gap-4">
+                <button id="add-item-btn" class="flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                    <i class="fa fa-plus mr-2"></i> 添加物品
+                </button>
+                <div class="relative ml-auto">
+                    <input type="text" id="admin-search" placeholder="搜索物品..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <!-- 管理员物品列表 -->
+            <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">物品名称</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类别</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">拾到地点</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">拾到日期</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-items-table" class="bg-white divide-y divide-gray-200">
+                        <!-- 管理员物品列表将通过JavaScript动态生成 -->
+                    </tbody>
+                </table>
+                
+                <!-- 无物品提示 -->
+                <div id="no-admin-items" class="hidden text-center py-16">
+                    <p class="text-gray-500 text-lg">暂无物品信息</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 物品详情模态框 -->
+        <div id="item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto card-shadow">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 id="modal-title" class="text-2xl font-bold text-dark"></h3>
+                        <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="modal-content" class="space-y-4">
+                        <!-- 物品详情将通过JavaScript动态生成 -->
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <button id="close-modal-btn" class="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-200 transition-custom">
+                            关闭
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加物品模态框（管理员） -->
+        <div id="add-item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto card-shadow">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-2xl font-bold text-dark">添加招领物品</h3>
+                        <button id="close-add-modal" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="admin-add-item-form" class="space-y-6">
+                        <div>
+                            <label for="admin-item-name" class="block text-gray-700 font-medium mb-2">物品名称</label>
+                            <input type="text" id="admin-item-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-item-category" class="block text-gray-700 font-medium mb-2">物品类别</label>
+                            <select id="admin-item-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                                <option value="">请选择类别</option>
+                                <option value="electronics">电子产品</option>
+                                <option value="documents">证件</option>
+                                <option value="bags">包袋</option>
+                                <option value="clothes">衣物</option>
+                                <option value="others">其他</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-item-description" class="block text-gray-700 font-medium mb-2">物品描述</label>
+                            <textarea id="admin-item-description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-found-location" class="block text-gray-700 font-medium mb-2">拾到地点</label>
+                            <input type="text" id="admin-found-location" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-found-date" class="block text-gray-700 font-medium mb-2">拾到日期</label>
+                            <input type="date" id="admin-found-date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div>
+                            <label for="admin-finder-contact" class="block text-gray-700 font-medium mb-2">联系方式</label>
+                            <input type="text" id="admin-finder-contact" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50" required>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-custom shadow-md">
+                                添加物品
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 成功提示模态框 -->
+        <div id="success-modal" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 hidden">
+            <div class="flex items-center">
+                <i class="fa fa-check-circle mr-2 text-xl"></i>
+                <span id="success-message"></span>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-university text-primary text-2xl"></i>
+                        <h3 class="text-xl font-bold">校园失物招领平台</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">帮助师生找回丢失物品，共建和谐校园环境。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom">
+                            <i class="fa fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom">
+                            <i class="fa fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom">
+                            <i class="fa fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-custom">首页</a></li>
+                        <li><a href="#" id="footer-found" class="text-gray-400 hover:text-white transition-custom">招领物品</a></li>
+                        <li><a href="#" id="footer-lost" class="text-gray-400 hover:text-white transition-custom">丢失物品登记</a></li>
+                        <li><a href="#" id="footer-report" class="text-gray-400 hover:text-white transition-custom">发布招领信息</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">联系我们</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">校园管理处办公室</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone text-primary mr-3"></i>
+                            <span class="text-gray-400">010-12345678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope text-primary mr-3"></i>
+                            <span class="text-gray-400">lostandfound@school.edu.cn</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2023 校园失物招领平台 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 代码 -->
+    <script>
+        // 模拟数据 - 物品列表
+        let items = [
+            {
+                id: 1,
+                name: "黑色笔记本电脑",
+                category: "electronics",
+                categoryName: "电子产品",
+                description: "联想品牌，黑色外壳，有一个小的磕碰痕迹在右上角，内有重要学习资料。",
+                location: "图书馆三楼自习区",
+                date: "2023-10-15",
+                contact: "张同学 138****5678",
+                status: "available"
+            },
+            {
+                id: 2,
+                name: "学生卡",
+                category: "documents",
+                categoryName: "证件",
+                description: "2021级计算机学院，姓名：李华，卡号：2021001234。",
+                location: "第一食堂一楼",
+                date: "2023-10-14",
+                contact: "王同学 微信：wxid_abc123",
+                status: "available"
+            },
+            {
+                id: 3,
+                name: "蓝色运动背包",
+                category: "bags",
+                categoryName: "包袋",
+                description: "耐克品牌，蓝色，内有几本教材和一个保温杯。",
+                location: "篮球场看台上",
+                date: "2023-10-13",
+                contact: "赵同学 139****9012",
+                status: "available"
+            },
+            {
+                id: 4,
+                name: "灰色外套",
+                category: "clothes",
+                categoryName: "衣物",
+                description: "优衣库灰色外套，M码，左口袋有一包纸巾。",
+                location: "教学楼201教室",
+                date: "2023-10-12",
+                contact: "陈同学 136****3456",
+                status: "claimed"
+            },
+            {
+                id: 5,
+                name: "数学课本",
+                category: "others",
+                categoryName: "其他",
+                description: "高等数学（第七版），书内有很多笔记，扉页写有名字。",
+                location: "图书馆二楼阅览室",
+                date: "2023-10-11",
+                contact: "刘同学 微信：liuxue123",
+                status: "available"
+            },
+            {
+                id: 6,
+                name: "无线耳机",
+                category: "electronics",
+                categoryName: "电子产品",
+                description: "白色AirPods，充电盒上有一个笑脸贴纸。",
+                location: "校园巴士上",
+                date: "2023-10-10",
+                contact: "孙同学 137****7890",
+                status: "available"
+            }
+        ];
+
+        // 页面元素
+        const sections = {
+            home: document.getElementById('home-section'),
+            found: document.getElementById('found-section'),
+            lost: document.getElementById('lost-section'),
+            report: document.getElementById('report-section'),
+            adminLogin: document.getElementById('admin-login-section'),
+            adminPanel: document.getElementById('admin-panel-section')
+        };
+        
+        const navLinks = {
+            home: document.getElementById('nav-home'),
+            found: document.getElementById('nav-found'),
+            lost: document.getElementById('nav-lost'),
+            admin: document.getElementById('nav-admin'),
+            mobileHome: document.getElementById('mobile-nav-home'),
+            mobileFound: document.getElementById('mobile-nav-found'),
+            mobileLost: document.getElementById('mobile-nav-lost'),
+            mobileAdmin: document.getElementById('mobile-nav-admin'),
+            footerFound: document.getElementById('footer-found'),
+            footerLost: document.getElementById('footer-lost'),
+            footerReport: document.getElementById('footer-report')
+        };
+        
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navbar = document.getElementById('navbar');
+        
+        // 管理员相关元素
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminUsername = document.getElementById('admin-username');
+        const adminPassword = document.getElementById('admin-password');
+        const loginError = document.getElementById('login-error');
+        const logoutBtn = document.getElementById('logout-btn');
+        const addItemBtn = document.getElementById('add-item-btn');
+        const addItemModal = document.getElementById('add-item-modal');
+        const closeAddModal = document.getElementById('close-add-modal');
+        const adminAddItemForm = document.getElementById('admin-add-item-form');
+        
+        // 物品模态框元素
+        const itemModal = document.getElementById('item-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        
+        // 成功提示模态框
+        const successModal = document.getElementById('success-modal');
+        const successMessage = document.getElementById('success-message');
+        
+        // 搜索和分类元素
+        const searchItems = document.getElementById('search-items');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const adminSearch = document.getElementById('admin-search');
+        
+        // 表单元素
+        const lostItemForm = document.getElementById('lost-item-form');
+        const foundItemForm = document.getElementById('found-item-form');
+        
+        // 初始化页面
+        function init() {
+            showSection('home');
+            renderRecentItems();
+            renderItems('all', '');
+            renderAdminItems('');
+            
+            // 事件监听
+            setupEventListeners();
+        }
+        
+        // 设置事件监听
+        function setupEventListeners() {
+            // 导航链接点击事件
+            navLinks.home.addEventListener('click', (e) => { e.preventDefault(); showSection('home'); });
+            navLinks.found.addEventListener('click', (e) => { e.preventDefault(); showSection('found'); });
+            navLinks.lost.addEventListener('click', (e) => { e.preventDefault(); showSection('lost'); });
+            navLinks.admin.addEventListener('click', (e) => { e.preventDefault(); showSection('adminLogin'); });
+            
+            navLinks.mobileHome.addEventListener('click', (e) => { e.preventDefault(); showSection('home'); closeMobileMenu(); });
+            navLinks.mobileFound.addEventListener('click', (e) => { e.preventDefault(); showSection('found'); closeMobileMenu(); });
+            navLinks.mobileLost.addEventListener('click', (e) => { e.preventDefault(); showSection('lost'); closeMobileMenu(); });
+            navLinks.mobileAdmin.addEventListener('click', (e) => { e.preventDefault(); showSection('adminLogin'); closeMobileMenu(); });
+            
+            navLinks.footerFound.addEventListener('click', (e) => { e.preventDefault(); showSection('found'); });
+            navLinks.footerLost.addEventListener('click', (e) => { e.preventDefault(); showSection('lost'); });
+            navLinks.footerReport.addEventListener('click', (e) => { e.preventDefault(); showSection('report'); });
+            
+            // 移动端菜单按钮点击事件
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+            
+            // 滚动事件 - 导航栏样式变化
+            window.addEventListener('scroll', handleScroll);
+            
+            // 管理员登录表单提交事件
+            adminLoginForm.addEventListener('submit', handleAdminLogin);
+            
+            // 登出按钮点击事件
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // 添加物品按钮点击事件
+            addItemBtn.addEventListener('click', () => { addItemModal.classList.remove('hidden'); });
+            
+            // 关闭添加物品模态框
+            closeAddModal.addEventListener('click', () => { addItemModal.classList.add('hidden'); });
+            
+            // 管理员添加物品表单提交事件
+            adminAddItemForm.addEventListener('submit', handleAddItem);
+            
+            // 关闭物品详情模态框
+            closeModal.addEventListener('click', closeItemModal);
+            closeModalBtn.addEventListener('click', closeItemModal);
+            
+            // 点击模态框外部关闭
+            itemModal.addEventListener('click', (e) => {
+                if (e.target === itemModal) {
+                    closeItemModal();
+                }
+            });
+            
+            // 分类按钮点击事件
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // 更新活跃状态
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-primary', 'text-white');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    btn.classList.add('active', 'bg-primary', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    // 筛选物品
+                    const category = btn.getAttribute('data-category');
+                    renderItems(category, searchItems.value);
+                });
+            });
+            
+            // 搜索框输入事件
+            searchItems.addEventListener('input', () => {
+                const activeCategory = document.querySelector('.category-btn.active').getAttribute('data-category');
+                renderItems(activeCategory, searchItems.value);
+            });
+            
+            // 管理员搜索框输入事件
+            adminSearch.addEventListener('input', () => {
+                renderAdminItems(adminSearch.value);
+            });
+            
+            // 丢失物品表单提交事件
+            lostItemForm.addEventListener('submit', handleLostItemSubmit);
+            
+            // 招领物品表单提交事件
+            foundItemForm.addEventListener('submit', handleFoundItemSubmit);
+        }
+        
+        // 显示指定区域
+        function showSection(sectionName) {
+            // 隐藏所有区域
+            Object.values(sections).forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // 显示指定区域
+            if (sections[sectionName]) {
+                sections[sectionName].classList.remove('hidden');
+            }
+            
+            // 更新导航链接活跃状态
+            updateNavActiveState(sectionName);
+        }
+        
+        // 更新导航链接活跃状态
+        function updateNavActiveState(sectionName) {
+            // 移除所有导航链接的活跃状态
+            Object.values(navLinks).forEach(link => {
+                if (link) {
+                    link.classList.remove('text-primary', 'font-bold');
+                    link.classList.add('text-gray-700');
+                }
+            });
+            
+            // 设置当前区域导航链接的活跃状态
+            switch(sectionName) {
+                case 'home':
+                    navLinks.home.classList.add('text-primary', 'font-bold');
+                    navLinks.home.classList.remove('text-gray-700');
+                    navLinks.mobileHome.classList.add('text-primary', 'font-bold');
+                    navLinks.mobileHome.classList.remove('text-gray-700');
+                    break;
+                case 'found':
+                    navLinks.found.classList.add('text-primary', 'font-bold');
+                    navLinks.found.classList.remove('text-gray-700');
+                    navLinks.mobileFound.classList.add('text-primary', 'font-bold');
+                    navLinks.mobileFound.classList.remove('text-gray-700');
+                    break;
+                case 'lost':
+                    navLinks.lost.classList.add('text-primary', 'font-bold');
+                    navLinks.lost.classList.remove('text-gray-700');
+                    navLinks.mobileLost.classList.add('text-primary', 'font-bold');
+                    navLinks.mobileLost.classList.remove('text-gray-700');
+                    break;
+                case 'report':
+                    // 没有直接的导航链接指向report，所以不需要特别设置
+                    break;
+                case 'adminLogin':
+                case 'adminPanel':
+                    navLinks.admin.classList.add('text-primary', 'font-bold');
+                    navLinks.admin.classList.remove('text-gray-700');
+                    navLinks.mobileAdmin.classList.add('text-primary', 'font-bold');
+                    navLinks.mobileAdmin.classList.remove('text-gray-700');
+                    break;
+            }
+        }
+        
+        // 切换移动端菜单
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // 关闭移动端菜单
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+        
+        // 处理滚动事件 - 导航栏样式变化
+        function handleScroll() {
+            if (window.scrollY > 10) {
+                navbar.classList.add('py-2', 'shadow-lg');
+                navbar.classList.remove('py-3', 'shadow-md');
+            } else {
+                navbar.classList.add('py-3', 'shadow-md');
+                navbar.classList.remove('py-2', 'shadow-lg');
+            }
+        }
+        
+        // 渲染最近物品
+        function renderRecentItems() {
+            const recentItemsContainer = document.getElementById('recent-items');
+            recentItemsContainer.innerHTML = '';
+            
+            // 获取最近的3个物品
+            const recentItems = [...items]
+                .filter(item => item.status === 'available')
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 3);
+            
+            recentItems.forEach(item => {
+                const itemCard = createItemCard(item);
+                recentItemsContainer.appendChild(itemCard);
+            });
+        }
+        
+        // 渲染物品列表
+        function renderItems(category, searchTerm) {
+            const itemsList = document.getElementById('items-list');
+            const noItems = document.getElementById('no-items');
+            itemsList.innerHTML = '';
+            
+            // 筛选物品
+            let filteredItems = items.filter(item => {
+                // 状态筛选：只显示可认领的物品
+                const statusMatch = item.status === 'available';
+                // 类别筛选
+                const categoryMatch = category === 'all' || item.category === category;
+                // 搜索筛选
+                const searchMatch = !searchTerm || 
+                                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    item.location.toLowerCase().includes(searchTerm.toLowerCase());
+                
+                return statusMatch && categoryMatch && searchMatch;
+            });
+            
+            // 按日期排序（最新的在前）
+            filteredItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filteredItems.length === 0) {
+                noItems.classList.remove('hidden');
+                return;
+            }
+            
+            noItems.classList.add('hidden');
+            
+            // 创建物品卡片
+            filteredItems.forEach(item => {
+                const itemCard = createItemCard(item);
+                itemsList.appendChild(itemCard);
+            });
+        }
+        
+        // 创建物品卡片
+        function createItemCard(item) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl overflow-hidden card-shadow hover:shadow-lg transition-custom';
+            
+            // 根据类别选择图标
+            let categoryIcon = '';
+            switch(item.category) {
+                case 'electronics':
+                    categoryIcon = '<i class="fa fa-mobile text-xl"></i>';
+                    break;
+                case 'documents':
+                    categoryIcon = '<i class="fa fa-id-card text-xl"></i>';
+                    break;
+                case 'bags':
+                    categoryIcon = '<i class="fa fa-briefcase text-xl"></i>';
+                    break;
+                case 'clothes':
+                    categoryIcon = '<i class="fa fa-shopping-bag text-xl"></i>';
+                    break;
+                default:
+                    categoryIcon = '<i class="fa fa-ellipsis-h text-xl"></i>';
+            }
+            
+            card.innerHTML = `
+                <div class="h-48 bg-gray-100 flex items-center justify-center">
+                    <img src="https://picsum.photos/seed/${item.id}/400/300" alt="${item.name}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-dark">${item.name}</h3>
+                        <span class="px-2 py-1 bg-blue-100 text-primary text-xs rounded-full">${item.categoryName}</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">${item.description}</p>
+                    <div class="flex items-center text-gray-500 text-sm mb-4">
+                        <div class="flex items-center mr-4">
+                            <i class="fa fa-map-marker mr-1"></i>
+                            <span>${item.location}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fa fa-calendar mr-1"></i>
+                            <span>${formatDate(item.date)}</span>
+                        </div>
+                    </div>
+                    <button class="view-item-btn w-full bg-primary/10 text-primary font-medium py-2 rounded-lg hover:bg-primary/20 transition-custom" data-id="${item.id}">
+                        查看详情
+                    </button>
+                </div>
+            `;
+            
+            // 添加查看详情事件
+            card.querySelector('.view-item-btn').addEventListener('click', () => {
+                showItemDetails(item.id);
+            });
+            
+            return card;
+        }
+        
+        // 渲染管理员物品列表
+        function renderAdminItems(searchTerm) {
+            const adminItemsTable = document.getElementById('admin-items-table');
+            const noAdminItems = document.getElementById('no-admin-items');
+            adminItemsTable.innerHTML = '';
+            
+            // 筛选物品
+            let filteredItems = items;
+            if (searchTerm) {
+                filteredItems = items.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.location.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            // 按日期排序（最新的在前）
+            filteredItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filteredItems.length === 0) {
+                noAdminItems.classList.remove('hidden');
+                return;
+            }
+            
+            noAdminItems.classList.add('hidden');
+            
+            // 创建表格行
+            filteredItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-custom';
+                
+                // 状态标签
+                let statusLabel = '';
+                if (item.status === 'available') {
+                    statusLabel = '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">可认领</span>';
+                } else {
+                    statusLabel = '<span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">已认领</span>';
+                }
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-medium text-gray-900">${item.name}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-gray-600">${item.categoryName}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-gray-600">${item.location}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-gray-600">${formatDate(item.date)}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${statusLabel}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="admin-view-item text-primary hover:text-primary/80 mr-3" data-id="${item.id}">查看</button>
+                        <button class="admin-toggle-status text-gray-600 hover:text-gray-900 mr-3" data-id="${item.id}">
+                            ${item.status === 'available' ? '标记已认领' : '标记可认领'}
+                        </button>
+                        <button class="admin-delete-item text-red-500 hover:text-red-700" data-id="${item.id}">删除</button>
+                    </td>
+                `;
+                
+                // 添加事件监听
+                row.querySelector('.admin-view-item').addEventListener('click', () => {
+                    showItemDetails(item.id);
+                });
+                
+                row.querySelector('.admin-toggle-status').addEventListener('click', () => {
+                    toggleItemStatus(item.id);
+                });
+                
+                row.querySelector('.admin-delete-item').addEventListener('click', () => {
+                    deleteItem(item.id);
+                });
+                
+                adminItemsTable.appendChild(row);
+            });
+        }
+        
+        // 显示物品详情
+        function showItemDetails(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+            
+            modalTitle.textContent = item.name;
+            
+            // 构建详情内容
+            modalContent.innerHTML = `
+                <div class="h-56 bg-gray-100 rounded-lg overflow-hidden mb-4">
+                    <img src="https://picsum.photos/seed/${item.id}/600/400" alt="${item.name}" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">类别：</div>
+                        <div class="w-2/3 font-medium">${item.categoryName}</div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">描述：</div>
+                        <div class="w-2/3">${item.description}</div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">拾到地点：</div>
+                        <div class="w-2/3">${item.location}</div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">拾到日期：</div>
+                        <div class="w-2/3">${formatDate(item.date)}</div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">状态：</div>
+                        <div class="w-2/3">
+                            ${item.status === 'available' ? 
+                                '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">可认领</span>' : 
+                                '<span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">已认领</span>'}
+                        </div>
+                    </div>
+                    
+                    ${item.status === 'available' ? `
+                    <div class="flex">
+                        <div class="w-1/3 text-gray-500">联系方式：</div>
+                        <div class="w-2/3 font-medium text-primary">${item.contact}</div>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // 显示模态框
+            itemModal.classList.remove('hidden');
+        }
+        
+        // 关闭物品详情模态框
+        function closeItemModal() {
+            itemModal.classList.add('hidden');
+        }
+        
+        // 处理管理员登录
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            
+            // 管理员账号密码验证
+            const validUsername = '1948483343';
+            const validPassword = 'pangqingAIyuan2';
+            
+            if (adminUsername.value === validUsername && adminPassword.value === validPassword) {
+                // 登录成功
+                loginError.classList.add('hidden');
+                showSection('adminPanel');
+                adminUsername.value = '';
+                adminPassword.value = '';
+            } else {
+                // 登录失败
+                loginError.classList.remove('hidden');
+            }
+        }
+        
+        // 处理登出
+        function handleLogout() {
+            showSection('adminLogin');
+        }
+        
+        // 处理添加物品
+        function handleAddItem(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const name = document.getElementById('admin-item-name').value;
+            const category = document.getElementById('admin-item-category').value;
+            const description = document.getElementById('admin-item-description').value;
+            const location = document.getElementById('admin-found-location').value;
+            const date = document.getElementById('admin-found-date').value;
+            const contact = document.getElementById('admin-finder-contact').value;
+            
+            // 获取类别名称
+            const categoryNames = {
+                'electronics': '电子产品',
+                'documents': '证件',
+                'bags': '包袋',
+                'clothes': '衣物',
+                'others': '其他'
+            };
+            
+            // 创建新物品
+            const newItem = {
+                id: items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1,
+                name,
+                category,
+                categoryName: categoryNames[category],
+                description,
+                location,
+                date,
+                contact,
+                status: 'available'
+            };
+            
+            // 添加到物品列表
+            items.push(newItem);
+            
+            // 重新渲染列表
+            renderAdminItems(adminSearch.value);
+            renderItems(document.querySelector('.category-btn.active').getAttribute('data-category'), searchItems.value);
+            renderRecentItems();
+            
+            // 关闭模态框并重置表单
+            addItemModal.classList.add('hidden');
+            adminAddItemForm.reset();
+            
+            // 显示成功提示
+            showSuccessMessage('物品添加成功！');
+        }
+        
+        // 切换物品状态
+        function toggleItemStatus(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (item) {
+                item.status = item.status === 'available' ? 'claimed' : 'available';
+                
+                // 重新渲染列表
+                renderAdminItems(adminSearch.value);
+                renderItems(document.querySelector('.category-btn.active').getAttribute('data-category'), searchItems.value);
+                renderRecentItems();
+                
+                // 显示成功提示
+                showSuccessMessage(`物品已${item.status === 'available' ? '标记为可认领' : '标记为已认领'}！`);
+            }
+        }
+        
+        // 删除物品
+        function deleteItem(itemId) {
+            if (confirm('确定要删除这个物品吗？')) {
+                items = items.filter(item => item.id !== itemId);
+                
+                // 重新渲染列表
+                renderAdminItems(adminSearch.value);
+                renderItems(document.querySelector('.category-btn.active').getAttribute('data-category'), searchItems.value);
+                renderRecentItems();
+                
+                // 显示成功提示
+                showSuccessMessage('物品已删除！');
+            }
+        }
+        
+        // 处理丢失物品表单提交
+        function handleLostItemSubmit(e) {
+            e.preventDefault();
+            
+            // 这里只是模拟提交，实际应用中应该发送到服务器
+            showSuccessMessage('丢失物品信息提交成功！我们会帮您留意相关物品。');
+            
+            // 重置表单
+            lostItemForm.reset();
+        }
+        
+        // 处理招领物品表单提交
+        function handleFoundItemSubmit(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const name = document.getElementById('found-item-name').value;
+            const category = document.getElementById('found-item-category').value;
+            const description = document.getElementById('found-item-description').value;
+            const location = document.getElementById('found-location').value;
+            const date = document.getElementById('found-date').value;
+            const contact = document.getElementById('finder-contact').value;
+            
+            // 获取类别名称
+            const categoryNames = {
+                'electronics': '电子产品',
+                'documents': '证件',
+                'bags': '包袋',
+                'clothes': '衣物',
+                'others': '其他'
+            };
+            
+            // 创建新物品（状态设为pending，表示需要管理员审核）
+            const newItem = {
+                id: items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1,
+                name,
+                category,
+                categoryName: categoryNames[category],
+                description,
+                location,
+                date,
+                contact,
+                status: 'available' // 简化处理，实际应用中可能需要审核
+            };
+            
+            // 添加到物品列表
+            items.push(newItem);
+            
+            // 重新渲染列表
+            renderItems(document.querySelector('.category-btn.active').getAttribute('data-category'), searchItems.value);
+            renderRecentItems();
+            
+            // 重置表单
+            foundItemForm.reset();
+            
+            // 显示成功提示
+            showSuccessMessage('招领物品信息提交成功！感谢您的善举。');
+        }
+        
+        // 显示成功提示消息
+        function showSuccessMessage(message) {
+            successMessage.textContent = message;
+            successModal.classList.remove('hidden');
+            
+            // 显示动画
+            setTimeout(() => {
+                successModal.classList.remove('translate-y-20', 'opacity-0');
+            }, 10);
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                successModal.classList.add('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    successModal.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+        
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-CN');
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
